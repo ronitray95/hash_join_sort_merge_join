@@ -120,6 +120,23 @@ public:
 		//throw std::out_of_range("Key not present");
 	}
 
+	void display()
+	{
+		for (int i = 0; i < NO_OF_BUCKETS; i++)
+		{
+			node<K, V> *entry = hashMap[i];
+			bool flag = false;
+			while (entry != NULL)
+			{
+				flag = true;
+				cout << entry->key << "+" << entry->value << " ";
+				entry = entry->next;
+			}
+			if (flag)
+				cout << endl;
+		}
+	}
+
 	void erase(K k)
 	{
 		ull hashValue = hashMethod(k);
@@ -226,9 +243,15 @@ void performHash(int argc, char **argv)
 		int sp1 = r.find(" ");
 		string r1 = r.substr(0, sp1);
 		string j1 = r.substr(sp1 + 1);
-		mp_r[j1] = r1;
-		if (lines >= blocks)
+		bool duplicate = true;
+		if (!mp_r.find(j1))
+		{
+			mp_r[j1] = r1;
+			duplicate = false;
+		}
+		if (duplicate || lines >= blocks)
 		{ // perform hash join for blocks
+			//mp_r.display();
 			ifstream ipS(inpFileS);
 			vector<pair<string, string>> sdata;
 			sdata.reserve(blocks);
@@ -266,8 +289,10 @@ void performHash(int argc, char **argv)
 			mp_r.clear();
 			lines = 0;
 		}
+		if(duplicate)
+			mp_r[j1] = r1;
 	}
-
+	//mp_r.display();
 	if (lines != 0)
 	{ // perform hash join for blocks
 		ifstream ipS(inpFileS);

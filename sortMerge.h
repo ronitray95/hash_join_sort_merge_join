@@ -190,6 +190,7 @@ bool check(int argc, char **argv) //pathR  pathS   type   num_blocks
         fcount = 0;
         phase1(inpFile, 100 * blocks);
         phase2(inpFile);
+        filePointers.clear();
     }
 
     return true;
